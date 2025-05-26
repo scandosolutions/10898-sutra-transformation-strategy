@@ -1190,16 +1190,13 @@
             observer.observe(el);
         });
 
-        // Simple password check (using base64 to avoid plain text)
-        const CORRECT_PASS = 'U3V0cmEyMDI1'; // "Sutra2025" in base64
-
+        // Simple password check
         function checkPassword(event) {
             event.preventDefault();
             const input = document.getElementById('passwordInput').value;
-            if (btoa(input) === CORRECT_PASS) {
+            if (input === 'Sutra2025') {
                 document.getElementById('passwordOverlay').style.display = 'none';
                 document.getElementById('mainContent').style.display = 'block';
-                // Store in session storage to maintain access during the session
                 sessionStorage.setItem('authenticated', 'true');
             } else {
                 alert('كلمة المرور غير صحيحة');
@@ -1365,7 +1362,7 @@
                     y: {
                         beginAtZero: true,
                         max: 100,
-                        ticks: { color: '#64748b' },
+                        ticks: color: '#64748b' },
                         grid: { color: '#e2e8f0' }
                     }
                 },
