@@ -1169,48 +1169,16 @@
     </footer>
 
     <script>
-        // Simple password check
-        function checkPassword(event) {
-            event.preventDefault();
-            const input = document.getElementById('passwordInput').value;
-            
-            if (input === '123456') {
+        document.getElementById('passwordForm').onsubmit = function(e) {
+            e.preventDefault();
+            if (document.getElementById('passwordInput').value === '123456') {
                 document.getElementById('passwordOverlay').style.display = 'none';
                 document.getElementById('mainContent').style.display = 'block';
-                sessionStorage.setItem('authenticated', 'true');
-                return false;
+            } else {
+                alert('كلمة المرور غير صحيحة');
             }
-            
-            alert('كلمة المرور غير صحيحة');
-            document.getElementById('passwordInput').value = '';
             return false;
-        }
-
-        if (sessionStorage.getItem('authenticated') === 'true') {
-            document.getElementById('passwordOverlay').style.display = 'none';
-            document.getElementById('mainContent').style.display = 'block';
-        }
-
-        // Set current year
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
-
-        // Simple scroll reveal
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
         };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.fade-in').forEach(el => {
-            observer.observe(el);
-        });
 
         // Chart configurations
         const chartOptions = {
