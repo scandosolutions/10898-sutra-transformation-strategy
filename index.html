@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سترة: استراتيجية العنقاء - تحول نموذج الامتياز</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #64748b;
+            --accent-color: #0ea5e9;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .card {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: all 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .hero {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%);
+    color: white;
+    padding: 3rem 0;
+    margin-bottom: 3rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.03)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.03)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.02)"/><circle cx="10" cy="60" r="0.5" fill="rgba(255,255,255,0.02)"/><circle cx="90" cy="40" r="0.5" fill="rgba(255,255,255,0.02)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+.hero > .container {
+    position: relative;
+    z-index: 1;
+}
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: 3rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .stat-card {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 1.5rem 0;
+        }
+
+        .timeline {
+            position: relative;
+            padding-right: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            right: 1rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border-color);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            padding-right: 3rem;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            right: 0.75rem;
+            top: 0.5rem;
+            width: 0.5rem;
+            height: 0.5rem;
+            background: var(--primary-color);
+            border-radius: 50%;
+            border: 2px solid var(--bg-primary);
+        }
+
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .franchise-model {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(239, 68, 68, 0.1) 100%);
+            border: 2px solid var(--danger-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .new-franchise-model {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(37, 99, 235, 0.1) 100%);
+            border: 2px solid var(--success-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .process-optimization {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);
+            border: 2px solid var(--success-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .maturity-assessment {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .pilot-phase {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(37, 99, 235, 0.1) 100%);
+            border: 2px solid var(--warning-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .grid-3 {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .grid-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .section-title {
+                font-size: 3rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .grid-4 {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .text-center { text-align: center; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .mb-8 { margin-bottom: 2rem; }
+        .mt-8 { margin-top: 2rem; }
+        .font-semibold { font-weight: 600; }
+        .font-bold { font-weight: 700; }
+        .text-lg { font-size: 1.125rem; }
+        .text-xl { font-size: 1.25rem; }
+        .text-2xl { font-size: 1.5rem; }
+
+        .logo {
+            height: 3rem;
+            width: auto;
+        }
+
+        .hero-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        .phase-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .phase-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2rem;
+            height: 2rem;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .list-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .list-dot {
+            width: 0.375rem;
+            height: 0.375rem;
+            background: var(--primary-color);
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .kpi-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .risk-high { border-left: 4px solid var(--danger-color); }
+        .risk-medium { border-left: 4px solid var(--warning-color); }
+        .risk-low { border-left: 4px solid var(--success-color); }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-primary);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: right;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: var(--bg-secondary);
+            font-weight: 600;
+        }
+
+        .icon {
+            font-size: 1.5rem;
+            min-width: 2rem;
+        }
+
+        .process-step {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .process-step::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--success-color);
+            border-radius: 2px;
+        }
+
+        .revenue-stream {
+            background: var(--bg-secondary);
+            border: 1px solid var(--success-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .revenue-stream::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--success-color);
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Enhanced Hero Section -->
+<header class="hero">
+    <div class="container">
+        <!-- Document Header Info -->
+        <div style="background: rgba(0, 0, 0, 0.3); border-radius: 12px; padding: 2rem; margin-bottom: 2rem; border: 1px solid rgba(255, 255, 255, 0.2);">
+            <div class="grid-2" style="align-items: center; gap: 3rem;">
+                <div>
+                    <img src="https://i.ibb.co/DPxpsQG6/Secondary-Logo-white-for-dark-background.png" alt="Scando Logo" style="height: 4rem; width: auto; margin-bottom: 1rem;">
+                    <h4 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem; color: rgba(255, 255, 255, 0.9);">Scando Integrated Solutions</h4>
+                    <p style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem;">Business Transformation & Process Optimization</p>
+                </div>
+                
+                <div style="text-align: left;">
+                    <div style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+                        <h5 style="color: #ef4444; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9rem;">⚠️ سري وخاص</h5>
+                        <p style="color: rgba(255, 255, 255, 0.8); font-size: 0.8rem;">هذا المستند سري ومخصص لاستخدام شركة سترة فقط</p>
+                    </div>
+                    
+                    <div style="color: rgba(255, 255, 255, 0.8); font-size: 0.85rem; line-height: 1.4;">
+                        <div style="margin-bottom: 0.5rem;"><strong>رقم المرجع:</strong> STR-10898</div>
+                        <div style="margin-bottom: 0.5rem;"><strong>تاريخ الإعداد:</strong> يناير 2025</div>
+                        <div style="margin-bottom: 0.5rem;"><strong>معد بواسطة:</strong> سامح الجوهري</div>
+                        <div style="margin-bottom: 0.5rem;"><strong>معد لـ:</strong> حسن حامد، الرئيس التنفيذي لسترة</div>
+                        <div><strong>النسخة:</strong> 2.0 - نموذج الامتياز المحدث</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Title Section -->
+        <div style="text-align: center; padding: 2rem 0;">
+            <h1 style="font-size: 3.5rem; font-weight: 700; margin-bottom: 1rem; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);">
+                سترة: استراتيجية العنقاء
+            </h1>
+            <div style="height: 3px; width: 100px; background: linear-gradient(90deg, #10b981, #0ea5e9); margin: 1rem auto;"></div>
+            <p style="font-size: 1.5rem; margin-bottom: 1rem; color: rgba(255, 255, 255, 0.9);">
+                تحول جذري من مالك فروع إلى شركة امتياز متطورة
+            </p>
+            <p style="font-size: 1rem; color: rgba(255, 255, 255, 0.7); max-width: 600px; margin: 0 auto;">
+                استراتيجية شاملة لتحويل نموذج الأعمال وتحرير رأس المال وبناء شبكة امتياز مستدامة
+            </p>
+        </div>
+        
+        <!-- Key Metrics Banner -->
+        <div style="background: rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 1.5rem; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2);">
+            <div class="grid-4" style="text-align: center;">
+                <div>
+                    <div style="font-size: 2rem; font-weight: 700; color: #10b981; margin-bottom: 0.5rem;">16→0</div>
+                    <p style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.8);">فرع مملوك → فرع امتياز</p>
+                </div>
+                <div>
+                    <div style="font-size: 2rem; font-weight: 700; color: #0ea5e9; margin-bottom: 0.5rem;">18 شهر</div>
+                    <p style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.8);">مدة التحول الكامل</p>
+                </div>
+                <div>
+                    <div style="font-size: 2rem; font-weight: 700; color: #f59e0b; margin-bottom: 0.5rem;">5+</div>
+                    <p style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.8);">مصادر دخل جديدة</p>
+                </div>
+                <div>
+                    <div style="font-size: 2rem; font-weight: 700; color: #8b5cf6; margin-bottom: 0.5rem;">60%</div>
+                    <p style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.8);">هدف النضج الرقمي</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+    <main class="container">
+        <!-- Executive Summary -->
+        <section class="fade-in">
+            <div class="card">
+                <h2 class="section-title">الملخص التنفيذي</h2>
+                <div class="grid-3">
+                    <div class="stat-card">
+                        <div class="stat-number" style="color: var(--primary-color);">9</div>
+                        <p>سنوات في السوق المصري</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" style="color: var(--danger-color);">16</div>
+                        <p>فرع مملوك حالياً</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" style="color: var(--success-color);">0</div>
+                        <p>فرع امتياز مستقل (الهدف)</p>
+                    </div>
+                </div>
+                
+                <div class="franchise-model">
+                    <h3 class="text-2xl font-semibold mb-4" style="color: var(--danger-color);">🚨 المشكلة الجوهرية: نموذج الملكية المباشرة</h3>
+                    <p class="text-lg mb-4">
+                        تواجه سترة أزمة سيولة حادة بسبب نموذج الأعمال الحالي حيث تمتلك وتدير وتمول رأس المال العامل لجميع الفروع البالغ عددها 16 فرعاً، مما يستنزف الموارد المالية ويحد من قدرة الشركة على النمو والتوسع.
+                    </p>
+                    <div class="grid-2">
+                        <div>
+                            <h4 class="font-semibold mb-2">التحديات المالية</h4>
+                            <ul class="space-y-1 text-sm">
+                                <li class="list-item">
+                                    <div class="list-dot"></div>
+                                    <span>تمويل رأس المال العامل لـ 16 فرع</span>
+                                </li>
+                                <li class="list-item">
+                                    <div class="list-dot"></div>
+                                    <span>تحمل جميع المخاطر التشغيلية</span>
+                                </li>
+                                <li class="list-item">
+                                    <div class="list-dot"></div>
+                                    <span>ضغط على السيولة والتدفق النقدي</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-2">القيود التشغيلية</h4>
+                            <ul class="space-y-1 text-sm">
+                                <li class="list-item">
+                                    <div class="list-dot"></div>
+                                    <span>إدارة مباشرة لجميع العمليات</span>
+                                </li>
+                                <li class="list-item">
+                                    <div class="list-dot"></div>
+                                    <span>محدودية التوسع بسبب متطلبات رأس المال</span>
+                                </li>
+                                <li class="list-item">
+                                    <div class="list-dot"></div>
+                                    <span>تعقيد في الإدارة والمتابعة</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="new-franchise-model">
+                    <h3 class="text-2xl font-semibold mb-4" style="color: var(--success-color);">🎯 الحل: التحول إلى نموذج الامتياز المستقل</h3>
+                    <p class="text-lg mb-4">
+                        استراتيجية العنقاء تركز على تحويل سترة من مالك ومدير للفروع إلى شركة امتياز متطورة، حيث تصبح الفروع كيانات مالية مستقلة يديرها شركاء امتياز مؤهلون، مما يحرر رأس المال ويفتح آفاق نمو جديدة.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Current vs Future Business Model -->
+        <section class="fade-in">
+            <div class="card">
+                <h2 class="section-title">تحول نموذج الأعمال الجذري</h2>
+                
+                <div class="grid-2">
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-6" style="color: var(--danger-color);">النموذج الحالي (المشكلة)</h3>
+                        <div class="franchise-model">
+                            <h4 class="font-semibold mb-4">🏢 سترة كمالك ومدير</h4>
+                            <div class="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>العنصر</th>
+                                            <th>المسؤولية</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>ملكية الفروع</td>
+                                            <td style="color: var(--danger-color);">سترة تمتلك جميع الفروع</td>
+                                        </tr>
+                                        <tr>
+                                            <td>رأس المال العامل</td>
+                                            <td style="color: var(--danger-color);">سترة تمول المخزون والعمليات</td>
+                                        </tr>
+                                        <tr>
+                                            <td>الإدارة التشغيلية</td>
+                                            <td style="color: var(--danger-color);">سترة تدير العمليات اليومية</td>
+                                        </tr>
+                                        <tr>
+                                            <td>المخاطر</td>
+                                            <td style="color: var(--danger-color);">سترة تتحمل جميع المخاطر</td>
+                                        </tr>
+                                        <tr>
+                                            <td>العائد للشركاء</td>
+                                            <td style="color: var(--danger-color);">7% مضمون من المبيعات</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-6" style="color: var(--success-color);">النموذج الجديد (الحل)</h3>
+                        <div class="new-franchise-model">
+                            <h4 class="font-semibold mb-4">🤝 سترة كشركة امتياز</h4>
+                            <div class="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>العنصر</th>
+                                            <th>المسؤولية</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>ملكية الفروع</td>
+                                            <td style="color: var(--success-color);">شركاء الامتياز يمتلكون فروعهم</td>
+                                        </tr>
+                                        <tr>
+                                            <td>رأس المال العامل</td>
+                                            <td style="color: var(--success-color);">شركاء الامتياز يمولون عملياتهم</td>
+                                        </tr>
+                                        <tr>
+                                            <td>الإدارة التشغيلية</td>
+                                            <td style="color: var(--success-color);">شركاء الامتياز يديرون فروعهم</td>
+                                        </tr>
+                                        <tr>
+                                            <td>المخاطر</td>
+                                            <td style="color: var(--success-color);">مشتركة ومحدودة</td>
+                                        </tr>
+                                        <tr>
+                                            <td>رسوم الامتياز</td>
+                                            <td style="color: var(--success-color);">5-7% من المبيعات لسترة</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8">
+                    <h3 class="text-2xl font-semibold mb-6 text-center">مقارنة التدفق النقدي: النموذج الحالي مقابل الجديد</h3>
+                    <div class="chart-container">
+                        <canvas id="businessModelChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Phoenix Strategy with New Franchise Focus -->
+        <section class="fade-in">
+            <div class="card">
+                <h2 class="section-title">استراتيجية العنقاء: التحول إلى نموذج الامتياز</h2>
+                <p class="section-subtitle">
+                    خطة تحول شاملة من ثلاث مراحل تركز على تحويل سترة من مالك فروع إلى شركة امتياز متطورة
+                </p>
+                
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="phase-card">
+                            <div class="phase-number">1</div>
+                            <h3 class="text-xl font-bold mb-2">المرحلة الأولى: تطوير وتطبيق نموذج الامتياز الجديد</h3>
+                            <p style="color: var(--text-muted); margin-bottom: 1rem;">أول 6 أشهر - التركيز على إنشاء وتجريب النموذج الجديد</p>
+                            
+                            <div class="pilot-phase mb-4">
+                                <h4 class="font-semibold mb-3" style="color: var(--warning-color);">🧪 استراتيجية التجريب والتطبيق</h4>
+                                <div class="grid-2">
+                                    <div>
+                                        <h5 class="font-semibold mb-2">الربع الأول (Q1): التطوير والتجريب</h5>
+                                        <ul class="space-y-1 text-sm">
+                                            <li class="list-item">
+                                                <div class="list-dot"></div>
+                                                <span>تطوير إطار قانوني ومالي للامتياز الجديد</span>
+                                            </li>
+                                            <li class="list-item">
+                                                <div class="list-dot"></div>
+                                                <span>اختيار فرع تجريبي وتحويله لنموذج الامتياز</span>
+                                            </li>
+                                            <li class="list-item">
+                                                <div class="list-dot"></div>
+                                                <span>تدريب شريك الامتياز الأول</span>
+                                            </li>
+                                            <li class="list-item">
+                                                <div class="list-dot"></div>
+                                                <span>وضع معايير الأداء ونظم المتابعة</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-semibold mb-2">الربع الثاني (Q2): التوسع المحدود</h5>
+                                        <ul class="space-y-1 text-sm">
+                                            <li class="list-item">
+                                                <div class="list-dot"></div>
+                                                <span>تقييم نتائج الفرع التجريبي</span>
+                                            </li>
+                                            <li class="list-item">
+                                                <div class="list-dot"></div>
+                                                <span>تطبيق النموذج على فرع ثاني</span>
+                                            </li>
+                                            <li class="list-item">
+                                                <div class="list-dot"></div>
+                                                <span>تحسين العمليات بناءً على التجربة</span>
+                                            </li>
+                                            <li class="list-item">
+                                                <div class="list-dot"></div>
+                                                <span>إعداد خطة التوسع للمرحلة التالية</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="process-optimization mb-4">
+                                <h4 class="font-semibold mb-3" style="color: var(--primary-color);">🔍 تقييم النضج الرقمي والعمليات</h4>
+                                <div class="grid-2">
+                                    <div>
+                                        <h5 class="font-semibold mb-2">التقييم الحالي</h5>
+                                        <ul class="space-y-1 text-sm">
+                                            <li class="list-item">
+                                                <div class="list-dot"></div>
+                                                <span>النضج الرقمي الحالي: أقل من 20%</span>
+                                            </li>
+                                            <li class="list-item">
+                                                <div class="list-dot"></div>
+                                                <span>تحليل شامل لجميع العمليات التجارية</span>
+                                            </li>
+                                            <li class="list-item">
+                                                <div class="list-dot"></div>
+                                                <span>تحديد نقاط الضعف والفرص</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-semibold mb-2">بناء إطار الحوكمة</h5>
+                                        <ul class="space-y-1 text-sm">
+                                            <li class="list-item">
+                                                <div class="list-dot"></div>
+                                                <span>تحديد نهج إدارة العمليات للامتياز</span>
+                                            </li>
+                                            <li class="list-item">
+                                                <div class="list-dot"></div>
+                                                <span>إنشاء إطار تصنيف العمليات</span>
+                                            </li>
+                                            <li class="list-item">
+                                                <div class="list-dot"></div>
+                                                <span>محاذاة الأهداف مع النموذج الجديد</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-6">
+                                <h4 class="font-semibold mb-3">مؤشرات الأداء الرئيسية</h4>
+                                <div class="grid-3">
+                                    <div class="kpi-card">
+                                        <div class="font-bold text-lg" style="color: var(--success-color);">2</div>
+                                        <p class="text-sm">فرع محول لنموذج الامتياز</p>
+                                    </div>
+                                    <div class="kpi-card">
+                                        <div class="font-bold text-lg" style="color: var(--primary-color);">إيجابي</div>
+                                        <p class="text-sm">التدفق النقدي من رسوم الامتياز</p>
+                                    </div>
+                                    <div class="kpi-card">
+                                        <div class="font-bold text-lg" style="color: var(--warning-color);">25%</div>
+                                        <p class="text-sm">نقاط النضج الرقمي المحققة</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="phase-card">
+                            <div class="phase-number">2</div>
+                            <h3 class="text-xl font-bold mb-2">المرحلة الثانية: تطوير نموذج الأعمال الجديد وتوسيع الامتياز</h3>
+                            <p style="color: var(--text-muted); margin-bottom: 1rem;">الأشهر 6-18 - التركيز على بناء مصادر الدخل الجديدة</p>
+                            
+                            <div class="new-franchise-model mb-4">
+                                <h4 class="font-semibold mb-3" style="color: var(--success-color);">💼 تطوير مصادر الدخل الجديدة لسترة</h4>
+                                <p class="mb-4">بدءاً من الربع الثالث، ستركز سترة على تطوير نموذج أعمال جديد كشركة امتياز متطورة</p>
+                                
+                                <div class="grid-2">
+                                    <div>
+                                        <h5 class="font-semibold mb-2">مصادر الدخل الأساسية</h5>
+                                        <div class="revenue-stream">
+                                            <h6 class="font-semibold mb-1">رسوم الامتياز الأولية</h6>
+                                            <p class="text-sm">رسوم انضمام لشركاء الامتياز الجدد</p>
+                                        </div>
+                                        <div class="revenue-stream">
+                                            <h6 class="font-semibold mb-1">رسوم الملكية المستمرة</h6>
+                                            <p class="text-sm">5-7% من مبيعات كل فرع امتياز</p>
+                                        </div>
+                                        <div class="revenue-stream">
+                                            <h6 class="font-semibold mb-1">رسوم التسويق</h6>
+                                            <p class="text-sm">2% للصندوق التسويقي المشترك</p>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-semibold mb-2">مصادر الدخل الإضافية</h5>
+                                        <div class="revenue-stream">
+                                            <h6 class="font-semibold mb-1">خدمات التدريب والاستشارة</h6>
+                                            <p class="text-sm">برامج تدريب متخصصة لشركاء الامتياز</p>
+                                        </div>
+                                        <div class="revenue-stream">
+                                            <h6 class="font-semibold mb-1">توريد المنتجات</h6>
+                                            <p class="text-sm">هوامش ربح من توريد المنتجات للفروع</p>
+                                        </div>
+                                        <div class="revenue-stream">
+                                            <h6 class="font-semibold mb-1">خدمات تقنية</h6>
+                                            <p class="text-sm">نظام ERP وحلول تقنية للشركاء</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="process-optimization mb-4">
+                                <h4 class="font-semibold mb-3" style="color: var(--primary-color);">🚀 تطبيق نظام ERP متكامل للامتياز</h4>
+                                <div class="grid-2">
+                                    <div>
+                                        <h5 class="font-semibold mb-2">وحدات خاصة بالامتياز</h5>
+                                        <ul class="space-y-1 text-sm">
+                                            <li class="list-item">
+                                                <div class="list-dot"></div>
+                                                <span>إدارة شركاء الامتياز</span>
+                                            </li>
+                                            <li class="list-item">
+                                                <div class="list-dot"></div>
+                                                <span>تتبع رسوم الملكية والأداء</span>
+                                            </li>
+                                            <li class="list-item">
+                                                <div class="list-dot"></div>
+                                                <span>نظام توريد موحد</span>
+                                            </li>
+                                            <li class="list-item">
+                                                <div class="list-dot"></div>
+                                                <span>تقارير أداء مركزية</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-semibold mb-2">إدارة المعرفة والتدريب</h5>
+                                        <ul class="space-y-1 text-sm">
+                                            <li class="list-item">
+                                                <div class="list-dot"></div>
+                                                <span>دليل عمليات الامتياز</span>
+                                            </li>
+                                            <li class="list-item">
+                                                <div class="list-dot"></div>
+                                                <span>برامج تدريب شركاء الامتياز</span>
+                                            </li>
+                                            <li class="list-item">
+                                                <div class="list-dot"></div>
+                                                <span>نظام دعم مستمر</span>
+                                            </li>
+                                            <li class="list-item">
+                                                <div class="list-dot"></div>
+                                                <span>معايير الجودة والأداء</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-6">
+                                <h4 class="font-semibold mb-3">مؤشرات الأداء الرئيسية</h4>
+                                <div class="grid-3">
+                                    <div class="kpi-card">
+                                        <div class="font-bold text-lg" style="color: var(--success-color);">8-10</div>
+                                        <p class="text-sm">فرع محول لنموذج الامتياز</p>
+                                    </div>
+                                    <div class="kpi-card">
+                                        <div class="font-bold text-lg" style="color: var(--primary-color);">3</div>
+                                        <p class="text-sm">مصادر دخل جديدة فعالة</p>
+                                    </div>
+                                    <div class="kpi-card">
+                                        <div class="font-bold text-lg" style="color: var(--warning-color);">45%</div>
+                                        <p class="text-sm">نقاط النضج الرقمي المحققة</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="phase-card">
+                            <div class="phase-number">3</div>
+                            <h3 class="text-xl font-bold mb-2">المرحلة الثالثة: النمو المستدام كشركة امتياز متطورة</h3>
+                            <p style="color: var(--text-muted); margin-bottom: 1rem;">ما بعد 18 شهرًا - التركيز على التوسع والتحسين المستمر</p>
+                            
+                            <div class="process-optimization mb-4">
+                                <h4 class="font-semibold mb-3" style="color: var(--accent-color);">🔄 دورة التحسين المستمر</h4>
+                                <div class="grid-3">
+                                    <div class="maturity-assessment">
+                                        <h5 class="font-semibold mb-2" style="color: var(--success-color);">📏 قياس</h5>
+                                        <p class="text-sm">تقييم أداء شركاء الامتياز والنضج الرقمي للشبكة</p>
+                                    </div>
+                                    <div class="maturity-assessment">
+                                        <h5 class="font-semibold mb-2" style="color: var(--warning-color);">🎯 محاذاة</h5>
+                                        <p class="text-sm">إعادة تقييم استراتيجية الامتياز وتطوير الخدمات</p>
+                                    </div>
+                                    <div class="maturity-assessment">
+                                        <h5 class="font-semibold mb-2" style="color: var(--primary-color);">⚡ تنفيذ</h5>
+                                        <p class="text-sm">تطبيق التحسينات وتوسيع شبكة الامتياز</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="grid-2 mt-4">
+                                <div>
+                                    <h4 class="font-semibold mb-3">توسيع شبكة الامتياز</h4>
+                                    <div class="list-item">
+                                        <div class="list-dot"></div>
+                                        <span>تحويل جميع الفروع المتبقية</span>
+                                    </div>
+                                    <div class="list-item">
+                                        <div class="list-dot"></div>
+                                        <span>فتح أسواق جديدة للامتياز</span>
+                                    </div>
+                                    <div class="list-item">
+                                        <div class="list-dot"></div>
+                                        <span>تطوير معايير اختيار صارمة</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold mb-3">تطوير الخدمات المتقدمة</h4>
+                                    <div class="list-item">
+                                        <div class="list-dot"></div>
+                                        <span>خدمات استشارية متخصصة</span>
+                                    </div>
+                                    <div class="list-item">
+                                        <div class="list-dot"></div>
+                                        <span>حلول تقنية متطورة</span>
+                                    </div>
+                                    <div class="list-item">
+                                        <div class="list-dot"></div>
+                                        <span>برامج تطوير مستمرة</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-6">
+                                <h4 class="font-semibold mb-3">مؤشرات الأداء الرئيسية</h4>
+                                <div class="grid-3">
+                                    <div class="kpi-card">
+                                        <div class="font-bold text-lg" style="color: var(--success-color);">25+</div>
+                                        <p class="text-sm">فرع امتياز في الشبكة</p>
+                                    </div>
+                                    <div class="kpi-card">
+                                        <div class="font-bold text-lg" style="color: var(--primary-color);">15%</div>
+                                        <p class="text-sm">نمو الإيرادات السنوي</p>
+                                    </div>
+                                    <div class="kpi-card">
+                                        <div class="font-bold text-lg" style="color: var(--warning-color);">60%</div>
+                                        <p class="text-sm">نقاط النضج الرقمي المستهدفة</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Franchise Relationship Structure -->
+        <section class="fade-in">
+            <div class="card">
+                <h2 class="section-title">هيكل العلاقة بين سترة وشركاء الامتياز</h2>
+                
+                <div class="grid-2">
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-6">مسؤوليات سترة (الشركة الأم)</h3>
+                        <div class="new-franchise-model">
+                            <h4 class="font-semibold mb-4">🏢 الدعم والإشراف</h4>
+                            <div class="space-y-3">
+                                <div class="process-step">
+                                    <h5 class="font-semibold mb-2">تطوير العلامة التجارية</h5>
+                                    <p class="text-sm">الحفاظ على هوية العلامة التجارية وتطوير استراتيجيات التسويق</p>
+                                </div>
+                                <div class="process-step">
+                                    <h5 class="font-semibold mb-2">توريد المنتجات</h5>
+                                    <p class="text-sm">ضمان جودة المنتجات وتوفيرها لجميع شركاء الامتياز</p>
+                                </div>
+                                <div class="process-step">
+                                    <h5 class="font-semibold mb-2">التدريب والدعم</h5>
+                                    <p class="text-sm">برامج تدريب مستمرة ودعم تقني وإداري</p>
+                                </div>
+                                <div class="process-step">
+                                    <h5 class="font-semibold mb-2">الحلول التقنية</h5>
+                                    <p class="text-sm">توفير نظام ERP وحلول تقنية متطورة</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-6">مسؤوليات شركاء الامتياز</h3>
+                        <div class="pilot-phase">
+                            <h4 class="font-semibold mb-4">🤝 الملكية والإدارة</h4>
+                            <div class="space-y-3">
+                                <div class="process-step">
+                                    <h5 class="font-semibold mb-2">الملكية المالية</h5>
+                                    <p class="text-sm">امتلاك الفرع ككيان مالي مستقل وتمويل رأس المال العامل</p>
+                                </div>
+                                <div class="process-step">
+                                    <h5 class="font-semibold mb-2">الإدارة التشغيلية</h5>
+                                    <p class="text-sm">إدارة العمليات اليومية والموظفين والعملاء</p>
+                                </div>
+                                <div class="process-step">
+                                    <h5 class="font-semibold mb-2">الالتزام بالمعايير</h5>
+                                    <p class="text-sm">تطبيق معايير الجودة والخدمة المحددة من سترة</p>
+                                </div>
+                                <div class="process-step">
+                                    <h5 class="font-semibold mb-2">دفع الرسوم</h5>
+                                    <p class="text-sm">دفع رسوم الملكية والتسويق وفقاً للاتفاقية</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8">
+                    <h3 class="text-2xl font-semibold mb-6 text-center">الهيكل المالي للعلاقة</h3>
+                    <div class="chart-container">
+                        <canvas id="franchiseStructureChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Digital Maturity Journey -->
+        <section class="fade-in">
+            <div class="card">
+                <h2 class="section-title">رحلة النضج الرقمي لسترة</h2>
+                
+                <div class="grid-2">
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-4">معايير التقييم الشاملة</h3>
+                        <div class="space-y-4">
+                            <div class="maturity-assessment">
+                                <h4 class="font-semibold mb-2">🔧 الوظائف والأدوات</h4>
+                                <p class="text-sm">تحليل الأدوات المستخدمة في إدارة الامتياز وتقييم ملاءمتها</p>
+                            </div>
+                            <div class="maturity-assessment">
+                                <h4 class="font-semibold mb-2">⚙️ مستوى التطبيق</h4>
+                                <p class="text-sm">قياس مدى نشر التقنيات عبر شبكة الامتياز</p>
+                            </div>
+                            <div class="maturity-assessment">
+                                <h4 class="font-semibold mb-2">💰 الفائدة التجارية</h4>
+                                <p class="text-sm">تقييم عائد الاستثمار في التقنيات لسترة وشركائها</p>
+                            </div>
+                            <div class="maturity-assessment">
+                                <h4 class="font-semibold mb-2">👥 تبني المستخدمين</h4>
+                                <p class="text-sm">قياس مشاركة شركاء الامتياز مع الأنظمة الجديدة</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-4 text-center">مسار تطور النضج الرقمي</h3>
+                        <div class="chart-container">
+                            <canvas id="maturityChart"></canvas>
+                        </div>
+                        <div class="mt-4 p-4" style="background: var(--bg-secondary); border-radius: 8px;">
+                            <h4 class="font-semibold mb-2">النتيجة الحالية</h4>
+                            <div class="text-3xl font-bold text-center" style="color: var(--danger-color);">أقل من 20%</div>
+                            <p class="text-sm text-center mt-2">الهدف: الوصول إلى 60% خلال 3 سنوات</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Future Vision -->
+        <section class="fade-in">
+            <div class="card">
+                <h2 class="section-title">الرؤية المستقبلية: سترة كشركة امتياز رائدة</h2>
+                
+                <div class="grid-2">
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-6">أهداف 2027</h3>
+                        <div class="grid-2">
+                            <div class="stat-card">
+                                <div class="stat-number" style="color: var(--success-color);">25+</div>
+                                <p>فرع امتياز مستقل</p>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number" style="color: var(--primary-color);">0</div>
+                                <p>فرع مملوك لسترة</p>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number" style="color: var(--warning-color);">5</div>
+                                <p>مصادر دخل متنوعة</p>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number" style="color: var(--accent-color);">60%</div>
+                                <p>نضج رقمي متقدم</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-6 text-center">مسار التحول المتوقع</h3>
+                        <div class="chart-container">
+                            <canvas id="trajectoryChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-8" style="padding: 2rem; background: var(--bg-secondary); border-radius: 8px;">
+                    <p class="text-xl font-semibold" style="color: var(--primary-color);">
+                        من خلال تطبيق استراتيجية العنقاء، ستتحول سترة من شركة تمتلك وتدير الفروع إلى شركة امتياز متطورة تركز على تطوير العلامة التجارية وتقديم الدعم لشبكة واسعة من شركاء الامتياز المستقلين، مما يحرر رأس المال ويفتح آفاق نمو لا محدودة.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: var(--bg-primary); border-top: 1px solid var(--border-color); padding: 2rem 0; margin-top: 3rem;">
+        <div class="container text-center">
+            <div style="display: flex; justify-content: center; align-items: center; gap: 1rem;">
+                <img src="https://i.ibb.co/p6h86Bkh/Primary-Logo-for-black-background.png" alt="Scando Logo" style="height: 2rem; opacity: 0.7;">
+                <p style="color: var(--text-muted);">© <span id="currentYear"></span> استراتيجية تحول سترة إلى شركة امتياز متطورة. مستوحى من "استراتيجية العنقاء".</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Set current year
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // Simple scroll reveal
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Chart configurations
+        const chartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        color: '#475569',
+                        font: { family: "'IBM Plex Sans Arabic', sans-serif", size: 12 },
+                        padding: 15,
+                        usePointStyle: true
+                    }
+                },
+                tooltip: {
+                    backgroundColor: '#0f172a',
+                    titleColor: '#fff',
+                    bodyColor: '#fff',
+                    cornerRadius: 6,
+                    padding: 10
+                }
+            },
+            elements: {
+                point: {
+                    radius: 4,
+                    hoverRadius: 6
+                },
+                line: {
+                    borderWidth: 2
+                }
+            }
+        };
+
+        // Business Model Comparison Chart
+        new Chart(document.getElementById('businessModelChart'), {
+            type: 'bar',
+            data: {
+                labels: ['النموذج الحالي', 'النموذج الجديد'],
+                datasets: [
+                    {
+                        label: 'التدفق النقدي الشهري (ألف جنيه)',
+                        data: [-500, 300], // Negative for current model, positive for new
+                        backgroundColor: ['#ef4444', '#10b981'],
+                        borderRadius: 4
+                    }
+                ]
+            },
+            options: {
+                ...chartOptions,
+                scales: {
+                    x: {
+                        ticks: { color: '#64748b' },
+                        grid: { color: '#e2e8f0' }
+                    },
+                    y: {
+                        ticks: { 
+                            color: '#64748b',
+                            callback: function(value) {
+                                return value + ' ألف ج.م';
+                            }
+                        },
+                        grid: { color: '#e2e8f0' }
+                    }
+                }
+            }
+        });
+
+        // Franchise Structure Chart
+        new Chart(document.getElementById('franchiseStructureChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['رسوم الملكية (5-7%)', 'رسوم التسويق (2%)', 'عائد الشريك (91-93%)'],
+                datasets: [{
+                    data: [6, 2, 92],
+                    backgroundColor: ['#2563eb', '#f59e0b', '#10b981'],
+                    borderWidth: 2,
+                    borderColor: '#ffffff'
+                }]
+            },
+            options: {
+                ...chartOptions,
+                plugins: {
+                    ...chartOptions.plugins,
+                    legend: {
+                        position: 'right'
+                    }
+                }
+            }
+        });
+
+        // Digital Maturity Chart
+        new Chart(document.getElementById('maturityChart'), {
+            type: 'line',
+            data: {
+                labels: ['الوضع الحالي', 'نهاية المرحلة 1', 'نهاية المرحلة 2', 'نهاية المرحلة 3', 'الهدف النهائي'],
+                datasets: [{
+                    label: 'نقاط النضج الرقمي (%)',
+                    data: [18, 25, 45, 55, 60],
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                ...chartOptions,
+                scales: {
+                    x: {
+                        ticks: { color: '#64748b' },
+                        grid: { color: '#e2e8f0' }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        max: 70,
+                        ticks: { 
+                            color: '#64748b',
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        },
+                        grid: { color: '#e2e8f0' }
+                    }
+                },
+                plugins: { ...chartOptions.plugins, legend: { display: false } }
+            }
+        });
+
+        // Trajectory Chart
+        new Chart(document.getElementById('trajectoryChart'), {
+            type: 'line',
+            data: {
+                labels: ['نقطة الأزمة', 'نهاية المرحلة 1', 'نهاية المرحلة 2', 'نهاية المرحلة 3', '2027'],
+                datasets: [{
+                    label: 'مؤشر صحة الأعمال',
+                    data: [15, 40, 65, 80, 90],
+                    borderColor: '#0ea5e9',
+                    backgroundColor: 'rgba(14, 165, 233, 0.1)',
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                ...chartOptions,
+                scales: {
+                    x: {
+                        ticks: { color: '#64748b' },
+                        grid: { color: '#e2e8f0' }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: { color: '#64748b' },
+                        grid: { color: '#e2e8f0' }
+                    }
+                },
+                plugins: { ...chartOptions.plugins, legend: { display: false } }
+            }
+        });
+    </script>
+</body>
+</html>
