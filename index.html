@@ -1169,6 +1169,28 @@
     </footer>
 
     <script>
+        // Simple password check
+        function checkPassword(event) {
+            event.preventDefault();
+            const input = document.getElementById('passwordInput').value;
+            
+            if (input === '123456') {
+                document.getElementById('passwordOverlay').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+                sessionStorage.setItem('authenticated', 'true');
+                return false;
+            }
+            
+            alert('كلمة المرور غير صحيحة');
+            document.getElementById('passwordInput').value = '';
+            return false;
+        }
+
+        if (sessionStorage.getItem('authenticated') === 'true') {
+            document.getElementById('passwordOverlay').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'block';
+        }
+
         // Set current year
         document.getElementById('currentYear').textContent = new Date().getFullYear();
 
@@ -1189,27 +1211,6 @@
         document.querySelectorAll('.fade-in').forEach(el => {
             observer.observe(el);
         });
-
-        // Simple password check
-        function checkPassword(event) {
-            event.preventDefault();
-            const input = document.getElementById('passwordInput').value;
-            if (input === 'Sutra2025') {
-                document.getElementById('passwordOverlay').style.display = 'none';
-                document.getElementById('mainContent').style.display = 'block';
-                sessionStorage.setItem('authenticated', 'true');
-            } else {
-                alert('كلمة المرور غير صحيحة');
-                document.getElementById('passwordInput').value = '';
-            }
-            return false;
-        }
-
-        // Check if already authenticated
-        if (sessionStorage.getItem('authenticated') === 'true') {
-            document.getElementById('passwordOverlay').style.display = 'none';
-            document.getElementById('mainContent').style.display = 'block';
-        }
 
         // Chart configurations
         const chartOptions = {
@@ -1282,7 +1283,7 @@
         new Chart(document.getElementById('franchiseStructureChart'), {
             type: 'doughnut',
             data: {
-                labels: ['رسوم الملكية (5-7%)', 'رسوم التسويق (2%)', 'عائد الشريك (91-93%)'],
+                labels: ['رسوم الملكية (5-7%)', 'رسوم التسويقي (2%)', 'عائد الشريك (91-93%)'],
                 datasets: [{
                     data: [6, 2, 92],
                     backgroundColor: ['#2563eb', '#f59e0b', '#10b981'],
