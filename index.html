@@ -408,50 +408,12 @@
             border-radius: 2px;
         }
 
-        #passwordOverlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--bg-primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-        }
-
-        #passwordForm {
-            background: var(--bg-secondary);
-            padding: 2rem;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            text-align: center;
-            max-width: 400px;
-            width: 90%;
-        }
-
         #mainContent {
-            display: none;
+            display: block;  /* Changed from 'none' to 'block' */
         }
     </style>
 </head>
 <body>
-    <div id="passwordOverlay">
-        <form id="passwordForm" onsubmit="return checkPassword(event)">
-            <img src="https://i.ibb.co/DPxpsQG6/Secondary-Logo-white-for-dark-background.png" alt="Scando Logo" style="height: 4rem; width: auto; margin-bottom: 2rem;">
-            <h2 style="margin-bottom: 1rem;">مستند سري</h2>
-            <p style="margin-bottom: 2rem; color: var(--text-secondary);">يرجى إدخال كلمة المرور للوصول</p>
-            <input type="password" id="passwordInput" 
-                   style="width: 100%; padding: 0.75rem; margin-bottom: 1rem; border: 1px solid var(--border-color); border-radius: 6px; text-align: center;"
-                   placeholder="كلمة المرور">
-            <button type="submit" 
-                    style="width: 100%; padding: 0.75rem; background: var(--primary-color); color: white; border: none; border-radius: 6px; cursor: pointer;">
-                دخول
-            </button>
-        </form>
-    </div>
-
     <div id="mainContent">
         <!-- Enhanced Hero Section -->
 <header class="hero">
@@ -1169,17 +1131,6 @@
     </footer>
 
     <script>
-        document.getElementById('passwordForm').onsubmit = function(e) {
-            e.preventDefault();
-            if (document.getElementById('passwordInput').value === '123456') {
-                document.getElementById('passwordOverlay').style.display = 'none';
-                document.getElementById('mainContent').style.display = 'block';
-            } else {
-                alert('كلمة المرور غير صحيحة');
-            }
-            return false;
-        };
-
         // Chart configurations
         const chartOptions = {
             responsive: true,
